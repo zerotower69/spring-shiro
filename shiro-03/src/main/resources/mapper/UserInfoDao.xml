@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zerotower.shiro03.dao.UserInfoDao">
+  <resultMap id="BaseResultMap" type="cn.zerotower.shiro03.model.UserInfo">
+    <!--@mbg.generated-->
+    <id column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="id_card_num" jdbcType="VARCHAR" property="idCardNum" />
+    <result column="state" jdbcType="CHAR" property="state" />
+  </resultMap>
+<!--  dto mapper-->
+  <resultMap id="UserDtoMapper" type="cn.zerotower.shiro03.dto.UserDto">
+    <id column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="id_card_num" jdbcType="VARCHAR" property="idCardNum" />
+    <result column="state" jdbcType="CHAR" property="state" />
+    <collection property="roleList" ofType="cn.zerotower.shiro03.dto.RoleDto">
+      <id column="role_id" jdbcType="INTEGER" property="id"/>
+      <result column="role" jdbcType="VARCHAR" property="role"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    `uid`, username, `password`, `name`, id_card_num, `state`
+  </sql>
+<!--  methods -->
+<!--  find roles by user id-->
+  <select id="findAllRoleByUserID" resultMap="UserDtoMapper"
+          parameterType="java.lang.Integer">
+    select t1.*,t2.role,t2.id as role_id
+    from user_info t1,sys_role t2,sys_user_role t3
+    where t1.uid=t3.uid and t2.id=t3.role_id and t1.uid=#{userId}
+  </select>
+  <select id="findOneByUsername" resultMap="BaseResultMap"
+          parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"></include>
+    from user_info
+    where username = #{username}
+  </select>
+  <select id="findRolesByUserId" resultType="cn.zerotower.shiro03.model.SysRole"
+          parameterType="java.lang.Integer">
+    select r.*
+    from user_info u,sys_role r, sys_user_role ur
+    where u.uid=ur.uid and r.id=ur.role_id and u.uid=#{userId}
+  </select>
+  <select id="findPassWordByUsername" resultType="java.lang.String" parameterType="java.lang.String">
+    select password from user_info where username=#{username}
+  </select>
+  <!--   methods-->
+</mapper>

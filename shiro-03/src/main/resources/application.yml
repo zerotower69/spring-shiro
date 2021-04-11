@@ -1,0 +1,47 @@
+# 端口
+server:
+  port: 8000
+  servlet:
+    context-path: /
+
+spring:
+  #应用名
+  application:
+    name: shiro -03-application
+  #    数据源配置
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 28830000 # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';）
+      maximum-pool-size: 9 # 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+    url: jdbc:mysql://localhost:3306/shiro-crypo?serverTimezone=Asia/Shanghai
+  #    redis配置
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password: ZT,redis69
+#    timeout: 30000 #超时30s
+#    database: 2
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-wait: -1
+#        max-idle: 8
+#        min-idle: 0
+  # thymeleaf模板配置
+  thymeleaf:
+    enabled: true
+    prefix: classpath:/templates/
+
+
+#打印sql
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: cn.zerotower.shiro01.dao
+
+
+

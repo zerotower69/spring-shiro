@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zerotower.shiro03.dao.SysRoleDao">
+  <resultMap id="BaseResultMap" type="cn.zerotower.shiro03.model.SysRole">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="available" jdbcType="CHAR" property="available" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <resultMap id="RoleDtoResultMap" type="cn.zerotower.shiro03.dto.RoleDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <collection property="permissions" ofType="cn.zerotower.shiro03.dto.PermissionDto">
+      <id column="permission_id" property="id"/>
+      <result column="permission" property="permission"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, available, `role`, description
+  </sql>
+<!--  methods-->
+<!--   find all permissions by role id-->
+  <select id="findAllPermissionsByRoleId" resultMap="RoleDtoResultMap"
+          parameterType="java.lang.Integer">
+    select t1.id,t1.role,t2.id as permission_id, t2.permission
+    from sys_role t1,sys_permission t2,sys_role_permission t3
+    where t1.id=t3.role_id and t2.id=t3.permission_id and t1.id=#{roleId}
+  </select>
+  <select id="findPermissionsByRoleId" resultType="cn.zerotower.shiro03.model.SysPermission"
+          parameterType="java.lang.Integer">
+    select p.*
+    from sys_role r,sys_permission p, sys_role_permission srp
+    where r.id=srp.role_id and p.id=srp.permission_id and r.id=#{roleId}
+  </select>
+  <!--  methods-->
+
+</mapper>
